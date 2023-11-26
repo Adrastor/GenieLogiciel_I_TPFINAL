@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 import random
 import time
 from helper import Helper as hp
@@ -12,6 +12,10 @@ class Modele():
         self.creepsVue =[]
         self.creep = Creep(self)
         self.creer_creep()
+        self.tour = []
+        self.argent = 100
+
+
 
     def creer_creep(self):
         n = 1
@@ -57,11 +61,26 @@ class Creep():
 
 class Vue():
     def __init__(self, parent, modele):
+
+        self.canevas: tk.Canvas
         self.parent = parent
         self.modele = modele
-        self.root = Tk()
+        self.root = tk.Tk()
         self.root.title("Tower Defense")
         self.creer_aire_de_jeu()
+        self.creer_bouton_tour("Tour Projectile", "blue")
+        self.creer_bouton_tour("Tour Éclair", "yellow")
+        self.creer_bouton_tour("Tour Poison", "green")
+        self.canevas.bind("<Button-1>", self.parent.clic_souris)
+
+
+    def selectionner_type_tour(self, couleur):
+        self.parent.type_tour = couleur
+
+    def creer_bouton_tour(self, nom, couleur):
+        # Créez un bouton pour créer une tour de type spécifié
+        bouton = tk.Button(self.root, text=nom, command=lambda: self.selectionner_type_tour(couleur))
+        bouton.pack()
 
     def afficher_creep(self):
         if self.modele.creepsVue:
@@ -73,8 +92,8 @@ class Vue():
             self.modele.creepsVue.append(creepVue)
 
     def creer_aire_de_jeu(self):
-        self.cadre_jeu = Frame(self.root)
-        self.canevas = Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
+        self.cadre_jeu = tk.Frame(self.root)
+        self.canevas = tk.Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
         #Tronçon
         self.canevas.create_rectangle(75, 0, 130, 460, fill="black")
         self.canevas.create_rectangle(75, 460, 269, 529, fill="blue")
@@ -93,13 +112,38 @@ class Vue():
         self.cadre_jeu.pack()
 
 
+
 class Controleur():
     def __init__(self):
+        self.argent = None
+        self.tour = None
+        self.canvas = None
+        self.type_tour = None
         self.modele = Modele(self)
         self.vue = Vue(self, self.modele)
         self.vue.afficher_creep()
         self.bouclerJeu()
         self.vue.root.mainloop()
+
+
+    def clic_souris(self, event):
+        x, y = event.x, event.y
+        print("clicsouris")
+        self.emplacement_tour = (x, y)
+        self.placer_tour()
+
+
+
+    def placer_tour(self):
+        if self.emplacement_tour and self.type_tour:
+            # Créez un carré de tour à l'emplacement choisi avec la couleur sélectionnée
+            x, y = self.emplacement_tour
+            taille = 50  # Taille du carré de la tour
+            tour = self.vue.canevas.create_rectangle(x - taille / 2, y - taille / 2, x + taille / 2, y + taille / 2,
+                                                fill=self.type_tour)
+            self.modele.tour.append(tour)
+            self.modele.argent -= 20  # Réduisez l'argent du joueur lorsqu'une tour est placée
+
 
     def bouclerJeu(self):
         self.modele.jouer_coup()
