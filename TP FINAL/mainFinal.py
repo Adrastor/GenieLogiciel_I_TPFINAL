@@ -19,26 +19,21 @@ class Modele():
         # TOURS
         self.tour = []
         # CHEMIN
-        self.troncon = [[75, 0, 130, 460], 
-                        [75, 460, 269, 529],
-                        [214, 100, 269, 529],
-                        [214, 100, 778, 159],
-                        [723, 100, 778, 280],
-                        [387, 221, 778, 280],
-                        [387, 280, 447, 500],
-                        [387, 460, 778, 529]]
-        
+        self.troncons = [[75, 0, 130, 460], 
+                        [130, 460, 269, 529],
+                        [269, 529, 269, 529],
+                        [269, 529, 778, 159],
+                        [778, 159, 778, 280],
+                        [778, 280, 778, 280],
+                        [778, 280, 447, 500],
+                        [447, 500, 778, 529]]
         # MÉTHODES
         self.creer_creep()
 
     def creer_creep(self):
         n = 20
         for i in range(n):
-            creep = Creep(self)
-            creep.posX = self.troncon[0][0]
-            creep.posY = self.troncon[0][1]
-            creep.tronconActuel[0] = self.troncon[0]
-            creep.prochainTroncon = self.troncon[0]
+            creep = Creep(self,self.troncons[0])
             self.creeps.append(creep)       
 
     # def jouer_coup(self):
@@ -53,29 +48,28 @@ class Modele():
     #         self.delaisCreeps -= 1
 
 class Creep():
-    def __init__(self, parent):
+    def __init__(self, parent, troncon):
         self.parent = parent
-        self.posX = 0
-        self.posY = 0
-        self.cx = 0
-        self.cy = 0
         self.compteurTroncon = 0
-        self.prochainTroncon = []
-        self.tronconActuel = []
-        self.angleActuelle = 0
+        self.tronconActuel = troncon
+        self.posX, self.posY, self.cx, self.cy = troncon
+        self.angleActuelle = hp.calcAngle(self.posX, self.posY, self.cx, self.cy)
         self.distance = 0
         self.vitesse = 5
         self.taille = 50
         self.couleur = "rouge"
 
-    def trouver_cible(self):
-        self.prochainTroncon = Modele.troncon[self.compteurTroncon + 1]
-
     def deplacer(self):   
         self.posX, self.posY = hp.getAngledPoint(self.angleActuelle,self.vitesse,self.posX,self.posY)
-        self.distance = hp.calcDistance(self.tronconActuel[0], self.tronconActuel[1], self.prochainTroncon[0], self.prochainTroncon[1])
+        self.distance = hp.calcDistance(self.posX, self.posY, self.cx, self.cy)
         if self.distance < self.vitesse:
-            self.trouver_cible()
+            self.compteurTroncon += 1
+            if self.compteurTroncon == len(self.parent.troncons):
+                pass # RENDU AU CHATEAU
+            else:
+                self.tronconActuel = self.parent.troncons[self.compteurTroncon]
+                self.posX, self.posY, self.cx, self.cy = self.tronconActuel
+                self.angleActuelle = hp.calcAngle(self.posX, self.posY, self.cx, self.cy)
         
         # self.posX1, self.posY1 = hp.getAngledPoint(self.angleActuelle, self.vitesse, self.posX1, self.posY1)
         # self.distance = hp.calcDistance(self.posX1, self.posY1, self.cx, self.cy)
