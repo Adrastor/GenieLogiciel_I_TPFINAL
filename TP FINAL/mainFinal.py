@@ -19,7 +19,15 @@ class Modele():
         # TOURS
         self.tour = []
         # CHEMIN
-        self.troncon = [(90, 0), (90, 480), (230, 480), (230, 115), (745, 115), (745, 210), (415, 250), (415, 500), (750, 500)]
+        self.troncon = [[75, 0, 130, 460], 
+                        [75, 460, 269, 529],
+                        [214, 100, 269, 529],
+                        [214, 100, 778, 159],
+                        [723, 100, 778, 280],
+                        [387, 221, 778, 280],
+                        [387, 280, 447, 500],
+                        [387, 460, 778, 529]]
+        
         # MÉTHODES
         self.creer_creep()
 
@@ -29,7 +37,8 @@ class Modele():
             creep = Creep(self)
             creep.posX = self.troncon[0][0]
             creep.posY = self.troncon[0][1]
-            creep.prochainTroncon = self.troncon[1]
+            creep.tronconActuel[0] = self.troncon[0]
+            creep.prochainTroncon = self.troncon[0]
             self.creeps.append(creep)       
 
     # def jouer_coup(self):
@@ -50,8 +59,9 @@ class Creep():
         self.posY = 0
         self.cx = 0
         self.cy = 0
-        self.tronconActuel = 0
+        self.compteurTroncon = 0
         self.prochainTroncon = []
+        self.tronconActuel = []
         self.angleActuelle = 0
         self.distance = 0
         self.vitesse = 5
@@ -59,13 +69,18 @@ class Creep():
         self.couleur = "rouge"
 
     def trouver_cible(self):
-        self.prochainTroncon = Modele.troncon[self.tronconActuel + 1]
+        self.prochainTroncon = Modele.troncon[self.compteurTroncon + 1]
 
-    def deplacer(self):
-        self.posX1, self.posY1 = hp.getAngledPoint(self.angleActuelle, self.vitesse, self.posX1, self.posY1)
-        self.distance = hp.calcDistance(self.posX1, self.posY1, self.cx, self.cy)
+    def deplacer(self):   
+        self.posX, self.posY = hp.getAngledPoint(self.angleActuelle,self.vitesse,self.posX,self.posY)
+        self.distance = hp.calcDistance(self.tronconActuel[0], self.tronconActuel[1], self.prochainTroncon[0], self.prochainTroncon[1])
         if self.distance < self.vitesse:
             self.trouver_cible()
+        
+        # self.posX1, self.posY1 = hp.getAngledPoint(self.angleActuelle, self.vitesse, self.posX1, self.posY1)
+        # self.distance = hp.calcDistance(self.posX1, self.posY1, self.cx, self.cy)
+        # if self.distance < self.vitesse:
+        #     self.trouver_cible()
 
 class Vue():
     def __init__(self, parent, modele):
@@ -106,14 +121,14 @@ class Vue():
     #     self.cadre_jeu = tk.Frame(self.root)
     #     self.canevas = tk.Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
     #     #Tronçon
-    #     self.canevas.create_rectangle(75, 0, 130, 460, fill="black")
-    #     self.canevas.create_rectangle(75, 460, 269, 529, fill="blue")
-    #     self.canevas.create_rectangle(214, 100, 269, 529, fill="black")
-    #     self.canevas.create_rectangle(214, 100, 778, 159, fill="blue")
-    #     self.canevas.create_rectangle(723, 100, 778, 280, fill="black")
-    #     self.canevas.create_rectangle(387, 221, 778, 280, fill="blue")
-    #     self.canevas.create_rectangle(387, 280, 447, 500, fill="black")
-    #     self.canevas.create_rectangle(387, 460, 778, 529, fill="blue")
+        self.canevas.create_rectangle(75, 0, 130, 460, fill="black")
+        self.canevas.create_rectangle(75, 460, 269, 529, fill="blue")
+        self.canevas.create_rectangle(214, 100, 269, 529, fill="black")
+        self.canevas.create_rectangle(214, 100, 778, 159, fill="blue")
+        self.canevas.create_rectangle(723, 100, 778, 280, fill="black")
+        self.canevas.create_rectangle(387, 221, 778, 280, fill="blue")
+        self.canevas.create_rectangle(387, 280, 447, 500, fill="black")
+        self.canevas.create_rectangle(387, 460, 778, 529, fill="blue")
 
     #     #Chateau
     #     self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
