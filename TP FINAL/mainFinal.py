@@ -1,6 +1,5 @@
 import tkinter as tk
 import random
-import time
 from helper import Helper as hp
 
 class Modele():
@@ -9,20 +8,14 @@ class Modele():
         self.hauteur = 720
         self.largeur = 900
         self.creeps = []
-        self.creepsVue =[]
-        self.creep = Creep(self)
-        self.creer_creep()
+        self.creepsVue = []
         self.tour = []
         self.argent = 100
-
-
+        self.creer_creep()
 
     def creer_creep(self):
-        n = 1
+        n = 20
         for i in range(n):
-            print(1)
-            x = random.randrange(self.largeur)
-            y = random.randrange(self.hauteur)
             creep = Creep(self)
             self.creeps.append(creep)
 
@@ -33,31 +26,32 @@ class Modele():
 class Creep():
     def __init__(self, parent):
         self.parent = parent
-        self.largeur = 55/4
-        self.hauteur = 55/2
+        self.largeur = 55 / 4
+        self.hauteur = 55 / 2
         self.cx = 0
         self.cy = 0
         self.angleActuelle = 0
-        self.posX1 = 75 + self.largeur #deplace axe horizon
-        self.posY1 = 0           #deplace axe verticale
+        self.posX1 = 90
+        self.posY1 = 1
         self.posX2 = self.posX1 + self.largeur * 2
         self.posY2 = self.posY1 + self.hauteur
-        self.vitesse = 5
+        self.vitesse = 15
+        self.destinations = [(90, 0), (90, 480), (230, 480), (230, 115), (745, 115), (745, 210), (415, 250), (415, 500), (750, 500)]
+        self.destination_index = 0
         self.trouver_cible()
-        self.deplacer()
 
     def trouver_cible(self):
-        self.cx = self.posX1
-        self.cy = 460 - self.hauteur
-        self.angleActuelle = hp.calcAngle(self.posX1, self.posY1, self.cx, self.cy)
+        if self.destination_index < len(self.destinations):
+            destination = self.destinations[self.destination_index]
+            self.cx, self.cy = destination
+            self.angleActuelle = hp.calcAngle(self.posX1, self.posY1, self.cx, self.cy)
+            self.destination_index += 1
 
     def deplacer(self):
         self.posX1, self.posY1 = hp.getAngledPoint(self.angleActuelle, self.vitesse, self.posX1, self.posY1)
-        print(self.posX1,self.posY1)
         self.distance = hp.calcDistance(self.posX1, self.posY1, self.cx, self.cy)
         if self.distance < self.vitesse:
             self.trouver_cible()
-
 
 class Vue():
     def __init__(self, parent, modele):
@@ -83,12 +77,15 @@ class Vue():
         bouton.pack()
 
     def afficher_creep(self):
-        if self.modele.creepsVue:
-            self.canevas.delete(self.modele.creepsVue[0])
-            self.modele.creepsVue.pop(0)
+        for creepVue in self.modele.creepsVue:
+            self.canevas.delete(creepVue)  # Supprimer l'ancien cercle
+
+        self.modele.creepsVue = []  # Réinitialiser la liste des vues des creeps
+
         for creep in self.modele.creeps:
-            creepVue = self.canevas.create_oval(creep.posX1, creep.posY1, creep.posX2, creep.posY2, fill="red", width=0,
-                                     tags="creep")
+            x1, y1 = creep.posX1, creep.posY1
+            x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
+            creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
             self.modele.creepsVue.append(creepVue)
 
     def creer_aire_de_jeu(self):
