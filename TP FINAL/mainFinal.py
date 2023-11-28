@@ -19,14 +19,14 @@ class Modele():
         # TOURS
         self.tour = []
         # CHEMIN
-        self.troncons = [[75, 0, 130, 460], 
-                        [130, 460, 269, 529],
-                        [269, 529, 269, 529],
-                        [269, 529, 778, 159],
-                        [778, 159, 778, 280],
-                        [778, 280, 778, 280],
-                        [778, 280, 447, 500],
-                        [447, 500, 778, 529]]
+        self.troncons = [[75, 0, 75, 460], 
+                        [75, 460, 300, 460],
+                        [300, 460, 300, 550],
+                        [300, 550, 700, 550],
+                        [700, 550, 800, 500],
+                        [800, 500, 800, 200],
+                        [800, 200, 600, 200],
+                        [600, 200, 600, 720]]
         # MÉTHODES
         self.creer_creep()
 
@@ -71,19 +71,16 @@ class Creep():
                 self.posX, self.posY, self.cx, self.cy = self.tronconActuel
                 self.angleActuelle = hp.calcAngle(self.posX, self.posY, self.cx, self.cy)
         
-        # self.posX1, self.posY1 = hp.getAngledPoint(self.angleActuelle, self.vitesse, self.posX1, self.posY1)
-        # self.distance = hp.calcDistance(self.posX1, self.posY1, self.cx, self.cy)
-        # if self.distance < self.vitesse:
-        #     self.trouver_cible()
 
 class Vue():
     def __init__(self, parent, modele):
 
-        self.canevas: tk.Canvas
         self.parent = parent
         self.modele = modele
         self.root = tk.Tk()
         self.root.title("Tower Defense")
+        
+        self.canevas = tk.Canvas(self.root,width = self.modele.largeur, height = self.modele.hauteur)
         # self.creer_aire_de_jeu()
         # self.creer_bouton_tour("Tour Projectile", "blue")
         # self.creer_bouton_tour("Tour Éclair", "yellow")
@@ -115,21 +112,16 @@ class Vue():
     #     self.cadre_jeu = tk.Frame(self.root)
     #     self.canevas = tk.Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
     #     #Tronçon
-        self.canevas.create_rectangle(75, 0, 130, 460, fill="black")
-        self.canevas.create_rectangle(75, 460, 269, 529, fill="blue")
-        self.canevas.create_rectangle(214, 100, 269, 529, fill="black")
-        self.canevas.create_rectangle(214, 100, 778, 159, fill="blue")
-        self.canevas.create_rectangle(723, 100, 778, 280, fill="black")
-        self.canevas.create_rectangle(387, 221, 778, 280, fill="blue")
-        self.canevas.create_rectangle(387, 280, 447, 500, fill="black")
-        self.canevas.create_rectangle(387, 460, 778, 529, fill="blue")
-
+    
+        for i in self.modele.troncons:
+            x,y,x1,y1 = i
+            self.canevas.create_line(x,y,x1,y1, width=4)
+            
     #     #Chateau
     #     self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
     #     self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
     #     self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
-    #     self.canevas.pack()
-    #     self.cadre_jeu.pack()
+        self.canevas.pack()
 
 
 
