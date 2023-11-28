@@ -36,16 +36,16 @@ class Modele():
             creep = Creep(self,self.troncons[0])
             self.creeps.append(creep)       
 
-    # def jouer_coup(self):
-    #     for i in self.creeps: #creepsVue
-    #         i.deplacer()
+    def jouer_coup(self):
+        for i in self.creeps: #creepsVue
+            i.deplacer()
             
-    #     if self.delaisCreeps == 0:
-    #         c = self.creeps.pop()
-    #         self.creepsVue.append(c)
-    #         self.delaisCreeps = self.delaisCreepsMax
-    #     else:
-    #         self.delaisCreeps -= 1
+        if self.delaisCreeps == 0:
+            c = self.creeps.pop()
+            self.creepsVue.append(c)
+            self.delaisCreeps = self.delaisCreepsMax
+        else:
+            self.delaisCreeps -= 1
 
 class Creep():
     def __init__(self, parent, troncon):
@@ -100,17 +100,16 @@ class Vue():
     #     for creepVue in self.modele.creepsVue:
     #         self.canevas.delete(creepVue)  # Supprimer l'ancien cercle
 
-        #self.modele.creepsVue = []  # Réinitialiser la liste des vues des creeps
-
-        # for creep in self.modele.creeps:
-        #     x1, y1 = creep.posX1, creep.posY1
-        #     x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
-        #     creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
-        #     self.modele.creepsVue.append(creepVue)
+    #     for creep in self.modele.creeps:
+    #         x1, y1 = creep.posX1, creep.posY1
+    #         x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
+    #         creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
+    #         self.modele.creepsVue.append(creepVue)
 
     # def creer_aire_de_jeu(self):
     #     self.cadre_jeu = tk.Frame(self.root)
     #     self.canevas = tk.Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
+    
     #     #Tronçon
     
         for i in self.modele.troncons:
@@ -118,9 +117,9 @@ class Vue():
             self.canevas.create_line(x,y,x1,y1, width=4)
             
     #     #Chateau
-    #     self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
-    #     self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
-    #     self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
+        self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
+        self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
+        self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
         self.canevas.pack()
 
 
