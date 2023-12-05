@@ -9,7 +9,7 @@ class Modele():
         # STATS
         self.argent = 100
         # CANVAS
-        self.hauteur = 800
+        self.hauteur = 700
         self.largeur = 1200
         # CREEPS
         self.delaisCreeps = 0
@@ -82,10 +82,15 @@ class Vue():
         self.cadreBouton = tk.Frame(self.root, width= 1200, height= 200)
         self.cadreBouton.pack(expand=1, fill="x")
         
+        # Tronçon
+        for i in self.modele.troncons:
+            x,y,x1,y1 = i
+            self.canevas.create_line(x,y,x1,y1, width=40, fill="grey", capstyle="round")
+            
         #TOURS
-        self.creer_bouton_tour("Tour Projectile", "blue",500,100)
-        self.creer_bouton_tour("Tour Éclair", "yellow",600,100)
-        self.creer_bouton_tour("Tour Poison", "green", 700, 100)
+        self.creer_bouton_tour("Tour Projectile", "blue", 430, 25)
+        self.creer_bouton_tour("Tour Éclair", "yellow", 550, 25)
+        self.creer_bouton_tour("Tour Poison", "green", 650, 25)
         # self.canevas.bind("<Button-1>", self.parent.clic_souris)
 
 
@@ -93,10 +98,8 @@ class Vue():
         self.parent.type_tour = couleur
 
     def creer_bouton_tour(self, nom, couleur, xPos, yPos):
-        # Créez un bouton pour créer une tour de type spécifié
         bouton = tk.Button(self.cadreBouton, text=nom, command=lambda: self.selectionner_type_tour(couleur))
         bouton.place(x = xPos, y = yPos)
-        # bouton.pack(side="left")
 
     def afficher_creep(self):
         for creepVue in self.modele.creepsVue:
@@ -108,21 +111,14 @@ class Vue():
             creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
             self.modele.creepsVue.append(creepVue)
 
-    #     #Tronçon
-    
-        for i in self.modele.troncons:
-            x,y,x1,y1 = i
-            self.canevas.create_line(x,y,x1,y1, width=40, fill="grey", capstyle="round")
-            
+                   
+    # Chateau
         translationY = -81
-        translationX = 320        
-    #     #Chateau
+        translationX = 320 
         self.canevas.create_rectangle(678+ translationX, 500 + translationY, 778+ translationX, 600+ translationY, fill="black")
         self.canevas.create_rectangle(678+ translationX, 460+ translationY, 638+ translationX, 500+ translationY, fill="black")
         self.canevas.create_rectangle(778+ translationX, 460+ translationY, 818+ translationX, 500+ translationY, fill="black")
-        
-
-
+    
 
 class Controleur():
     def __init__(self):
