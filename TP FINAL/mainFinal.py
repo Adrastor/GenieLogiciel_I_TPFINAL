@@ -116,10 +116,12 @@ class Vue():
             x,y,x1,y1 = i
             self.canevas.create_line(x,y,x1,y1, width=4)
             
+        translationY = -99
+        translationX = 320        
     #     #Chateau
-        # self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
-        # self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
-        # self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
+        self.canevas.create_rectangle(678+ translationX, 500 + translationY, 778+ translationX, 600+ translationY, fill="grey")
+        self.canevas.create_rectangle(678+ translationX, 460+ translationY, 638+ translationX, 500+ translationY, fill="grey")
+        self.canevas.create_rectangle(778+ translationX, 460+ translationY, 818+ translationX, 500+ translationY, fill="grey")
         self.canevas.pack()
 
 
