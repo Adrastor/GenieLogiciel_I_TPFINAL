@@ -40,12 +40,6 @@ class Modele():
         for i in self.creeps: #creepsVue
             i.deplacer()
             
-        if self.delaisCreeps == 0:
-            c = self.creeps.pop()
-            self.creepsVue.append(c)
-            self.delaisCreeps = self.delaisCreepsMax
-        else:
-            self.delaisCreeps -= 1
 
 class Creep():
     def __init__(self, parent, troncon):
@@ -56,6 +50,8 @@ class Creep():
         self.angleActuelle = hp.calcAngle(self.posX, self.posY, self.cx, self.cy)
         self.distance = 0
         self.vitesse = 5
+        self.largeur = 10
+        self.hauteur = 10
         self.taille = 50
         self.couleur = "rouge"
 
@@ -80,49 +76,51 @@ class Vue():
         self.root = tk.Tk()
         self.root.title("Tower Defense")
         
-        self.canevas = tk.Canvas(self.root,width = self.modele.largeur, height = self.modele.hauteur)
-        # self.creer_aire_de_jeu()
-        # self.creer_bouton_tour("Tour Projectile", "blue")
-        # self.creer_bouton_tour("Tour Éclair", "yellow")
-        # self.creer_bouton_tour("Tour Poison", "green")
+        
+        self.canevas = tk.Canvas(self.root,width = self.modele.largeur, height = self.modele.hauteur, bg="green")
+        self.canevas.pack()
+        self.cadreBouton = tk.Frame(self.root, width= 1200, height= 200)
+        self.cadreBouton.pack(expand=1, fill="x")
+        
+        #TOURS
+        self.creer_bouton_tour("Tour Projectile", "blue",500,100)
+        self.creer_bouton_tour("Tour Éclair", "yellow",600,100)
+        self.creer_bouton_tour("Tour Poison", "green", 700, 100)
         # self.canevas.bind("<Button-1>", self.parent.clic_souris)
 
 
-    # def selectionner_type_tour(self, couleur):
-    #     self.parent.type_tour = couleur
+    def selectionner_type_tour(self, couleur):
+        self.parent.type_tour = couleur
 
-    # def creer_bouton_tour(self, nom, couleur):
-    #     # Créez un bouton pour créer une tour de type spécifié
-    #     bouton = tk.Button(self.root, text=nom, command=lambda: self.selectionner_type_tour(couleur))
-    #     bouton.pack()
+    def creer_bouton_tour(self, nom, couleur, xPos, yPos):
+        # Créez un bouton pour créer une tour de type spécifié
+        bouton = tk.Button(self.cadreBouton, text=nom, command=lambda: self.selectionner_type_tour(couleur))
+        bouton.place(x = xPos, y = yPos)
+        # bouton.pack(side="left")
 
-    # def afficher_creep(self):
-    #     for creepVue in self.modele.creepsVue:
-    #         self.canevas.delete(creepVue)  # Supprimer l'ancien cercle
+    def afficher_creep(self):
+        for creepVue in self.modele.creepsVue:
+            self.canevas.delete(creepVue)  # Supprimer l'ancien cercle
 
-    #     for creep in self.modele.creeps:
-    #         x1, y1 = creep.posX1, creep.posY1
-    #         x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
-    #         creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
-    #         self.modele.creepsVue.append(creepVue)
+        for creep in self.modele.creeps:
+            x1, y1 = creep.posX, creep.posY
+            x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
+            creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
+            self.modele.creepsVue.append(creepVue)
 
-    # def creer_aire_de_jeu(self):
-    #     self.cadre_jeu = tk.Frame(self.root)
-    #     self.canevas = tk.Canvas(self.root, width=self.modele.largeur, height=self.modele.hauteur, bg="white")
-    
     #     #Tronçon
     
         for i in self.modele.troncons:
             x,y,x1,y1 = i
-            self.canevas.create_line(x,y,x1,y1, width=4)
+            self.canevas.create_line(x,y,x1,y1, width=40, fill="grey", capstyle="round")
             
-        translationY = -99
+        translationY = -81
         translationX = 320        
     #     #Chateau
-        self.canevas.create_rectangle(678+ translationX, 500 + translationY, 778+ translationX, 600+ translationY, fill="grey")
-        self.canevas.create_rectangle(678+ translationX, 460+ translationY, 638+ translationX, 500+ translationY, fill="grey")
-        self.canevas.create_rectangle(778+ translationX, 460+ translationY, 818+ translationX, 500+ translationY, fill="grey")
-        self.canevas.pack()
+        self.canevas.create_rectangle(678+ translationX, 500 + translationY, 778+ translationX, 600+ translationY, fill="black")
+        self.canevas.create_rectangle(678+ translationX, 460+ translationY, 638+ translationX, 500+ translationY, fill="black")
+        self.canevas.create_rectangle(778+ translationX, 460+ translationY, 818+ translationX, 500+ translationY, fill="black")
+        
 
 
 
@@ -155,8 +153,8 @@ class Controleur():
 
 
     def bouclerJeu(self):
-        # self.modele.jouer_coup()
-        # self.vue.afficher_creep()
+        self.modele.jouer_coup()
+        self.vue.afficher_creep()
         self.vue.root.after(40, self.bouclerJeu)
 
 
