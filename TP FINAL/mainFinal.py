@@ -9,8 +9,8 @@ class Modele():
         # STATS
         self.argent = 100
         # CANVAS
-        self.hauteur = 720
-        self.largeur = 900
+        self.hauteur = 800
+        self.largeur = 1200
         # CREEPS
         self.delaisCreeps = 0
         self.delaisCreepsMax = 24 #1 seconde
@@ -19,14 +19,14 @@ class Modele():
         # TOURS
         self.tour = []
         # CHEMIN
-        self.troncons = [[75, 0, 75, 460], 
-                        [75, 460, 300, 460],
-                        [300, 460, 300, 550],
-                        [300, 550, 700, 550],
-                        [700, 550, 800, 500],
-                        [800, 500, 800, 200],
-                        [800, 200, 600, 200],
-                        [600, 200, 600, 720]]
+        self.troncons = [[150, 0, 150, 500], 
+                        [150, 500, 400, 500],
+                        [400, 500, 400, 100],
+                        [400, 100, 1000, 100],
+                        [1000, 100, 1000, 300],
+                        [1000, 300, 700, 300],
+                        [700, 300, 700, 500],
+                        [700, 500, 1000, 500]]
         # MÉTHODES
         self.creer_creep()
 
@@ -117,9 +117,9 @@ class Vue():
             self.canevas.create_line(x,y,x1,y1, width=4)
             
     #     #Chateau
-        self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
-        self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
-        self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
+        # self.canevas.create_rectangle(678, 450, 778, 550, fill="grey")
+        # self.canevas.create_rectangle(678, 410, 638, 450, fill="grey")
+        # self.canevas.create_rectangle(778, 410, 818, 450, fill="grey")
         self.canevas.pack()
 
 
