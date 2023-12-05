@@ -6,19 +6,19 @@ from helper import Helper as hp
 class Modele():
     def __init__(self, parent):
         self.parent = parent
-        # STATS
+        # Stats
         self.argent = 100
-        # CANVAS
+        # Canvas
         self.hauteur = 700
         self.largeur = 1200
-        # CREEPS
+        # Creeps
         self.delaisCreeps = 0
         self.delaisCreepsMax = 24 #1 seconde
         self.creeps = []
         self.creepsVue = []
-        # TOURS
+        # Tours
         self.tour = []
-        # CHEMIN
+        # Chemin
         self.troncons = [[150, 0, 150, 500], 
                         [150, 500, 400, 500],
                         [400, 500, 400, 100],
@@ -27,7 +27,8 @@ class Modele():
                         [1000, 300, 700, 300],
                         [700, 300, 700, 500],
                         [700, 500, 1000, 500]]
-        # MÉTHODES
+        
+        # Méthodes
         self.creer_creep()
 
     def creer_creep(self):
@@ -50,8 +51,8 @@ class Creep():
         self.angleActuelle = hp.calcAngle(self.posX, self.posY, self.cx, self.cy)
         self.distance = 0
         self.vitesse = 5
-        self.largeur = 10
-        self.hauteur = 10
+        self.largeur = 25
+        self.hauteur = 25
         self.taille = 50
         self.couleur = "rouge"
 
@@ -75,8 +76,6 @@ class Vue():
         self.modele = modele
         self.root = tk.Tk()
         self.root.title("Tower Defense")
-        
-        
         self.canevas = tk.Canvas(self.root,width = self.modele.largeur, height = self.modele.hauteur, bg="green")
         self.canevas.pack()
         self.cadreBouton = tk.Frame(self.root, width= 1200, height= 200)
@@ -87,12 +86,11 @@ class Vue():
             x,y,x1,y1 = i
             self.canevas.create_line(x,y,x1,y1, width=40, fill="grey", capstyle="round")
             
-        #TOURS
+        # Tours
         self.creer_bouton_tour("Tour Projectile", "blue", 430, 25)
         self.creer_bouton_tour("Tour Éclair", "yellow", 550, 25)
         self.creer_bouton_tour("Tour Poison", "green", 650, 25)
         # self.canevas.bind("<Button-1>", self.parent.clic_souris)
-
 
     def selectionner_type_tour(self, couleur):
         self.parent.type_tour = couleur
@@ -107,11 +105,10 @@ class Vue():
 
         for creep in self.modele.creeps:
             x1, y1 = creep.posX, creep.posY
-            x2, y2 = x1 + creep.largeur * 2, y1 + creep.hauteur
+            x2, y2 = x1 + creep.largeur, y1 + creep.hauteur
             creepVue = self.canevas.create_oval(x1, y1, x2, y2, fill="red", width=0, tags="creep")
             self.modele.creepsVue.append(creepVue)
-
-                   
+     
     # Chateau
         translationY = -81
         translationX = 320 
